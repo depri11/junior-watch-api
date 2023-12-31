@@ -1,0 +1,7 @@
+serviceName: api_gateway_service
+grpc:
+    readerServicePort: :5003
+logger:
+    level: debug
+    devMode: false
+    encoder: json
