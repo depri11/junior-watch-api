@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package userService;
+
+option go_package = "./;userService";
+
+import "google/protobuf/timestamp.proto";
+
+message CreateUserRequest {
+  string UserID = 1;
+  string Username = 2;
+  string Email = 3;
+  string Address = 4;
+  double Price = 5;
+  int32 Phone = 6;
+  int32 RoleID = 7;
+  google.protobuf.Timestamp CreatedAt = 8;
+  string CreatedBy = 9;
+  google.protobuf.Timestamp UpdatedAt = 10;
+  string UpdatedBy = 11;
+  google.protobuf.Timestamp DeleteAt = 12;
+  string DeleteBy = 13;
+}
+
+message CreateUserResponse {
+  string ProductID = 1;
+}
+
+service userService {
+  rpc CreateProduct(CreateUserRequest) returns (CreateUserResponse);
+}
