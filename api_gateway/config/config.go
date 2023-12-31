@@ -28,7 +28,7 @@ type Http struct {
 	Port                string   `mapstructure:"port"`
 	Development         bool     `mapstructure:"development"`
 	BasePath            string   `mapstructure:"basePath"`
-	ProductsPath        string   `mapstructure:"productsPath"`
+	UsersPath           string   `mapstructure:"usersPath"`
 	DebugHeaders        bool     `mapstructure:"debugHeaders"`
 	HttpClientDebug     bool     `mapstructure:"httpClientDebug"`
 	DebugErrorsResponse bool     `mapstructure:"debugErrorsResponse"`

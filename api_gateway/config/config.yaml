@@ -1,6 +1,11 @@
 serviceName: api_gateway_service
 grpc:
     readerServicePort: :5003
+http:
+    port: :6001
+    development: true
+    basePath: /api/v1
+    usersPath: /api/v1/users
 logger:
     level: debug
     devMode: false
