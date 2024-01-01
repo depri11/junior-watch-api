@@ -1,0 +1,21 @@
+serviceName: user_service
+grpc-server:
+    port: :6002
+    development: true
+    Timeout: 15
+    ReadTimeout: 5
+    WriteTimeout: 5
+    MaxConnectionIdle: 5
+    MaxConnectionAge: 5
+logger:
+    level: debug
+    devMode: false
+    encoder: json
+postgres:
+    host: localhost
+    port: 5433
+    user: postgres
+    password: postgres
+    database: user_db
+    sslMode: disable
+    pgDriver: pgx

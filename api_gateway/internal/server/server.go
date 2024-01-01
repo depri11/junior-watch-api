@@ -7,7 +7,7 @@ import (
 	"syscall"
 
 	"github.com/depri11/junior-watch-api/api_gateway/config"
-	"github.com/depri11/junior-watch-api/api_gateway/internal/client"
+	"github.com/depri11/junior-watch-api/api_gateway/internal/grpc_client"
 	v1 "github.com/depri11/junior-watch-api/api_gateway/internal/user/delivery/http/v1"
 	"github.com/depri11/junior-watch-api/api_gateway/internal/user/service"
 	"github.com/depri11/junior-watch-api/pkg/interceptors"
@@ -31,12 +31,12 @@ func NewServer(gin *gin.Engine, log logger.Logger, cfg *config.Config) *server {
 }
 
 func (s *server) Run() error {
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	s.im = interceptors.NewInterceptorManager(s.log)
 
-	userServiceConn, err := client.NewReaderServiceConn(ctx, s.cfg, s.im)
+	userServiceConn, err := grpc_client.NewUserServiceConn(ctx, s.cfg, s.im, s.cfg.Grpc.UserServicePort)
 	if err != nil {
 		return err
 	}
@@ -46,8 +46,11 @@ func (s *server) Run() error {
 
 	s.ps = service.NewUserService(s.log, s.cfg, userClient)
 
-	usersHandlers := v1.NewUserHandlers(s.gin.Group(s.cfg.Http.UsersPath), s.log, s.cfg, s.ps, s.v)
+	usersHandlers := v1.NewUserHandlers(s.gin.Group(s.cfg.Http.UsersPath), s.log, s.cfg, s.v, s.ps)
 	usersHandlers.Routes()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 
 	go func() {
 		if err := s.runHttpServer(); err != nil {
@@ -57,8 +60,14 @@ func (s *server) Run() error {
 	}()
 	s.log.Infof("API Gateway is listening on PORT: %s", s.cfg.Http.Port)
 
-	<-ctx.Done()
-	s.log.Warn("Server is Shutdown")
+	select {
+	case v := <-quit:
+		s.log.Errorf("signal.Notify: %v", v)
+	case done := <-ctx.Done():
+		s.log.Errorf("ctx.Done: %v", done)
+	}
+
+	s.log.Info("Server Exited Properly")
 
 	return nil
 }

@@ -36,7 +36,7 @@ type Http struct {
 }
 
 type Grpc struct {
-	UserServicePort string `mapstructure:"readerServicePort"`
+	UserServicePort string `mapstructure:"userServicePort"`
 }
 
 func InitConfig() (*Config, error) {

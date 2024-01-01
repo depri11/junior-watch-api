@@ -1,6 +1,7 @@
 package constants
 
 const (
+	GrpcPort        = "GRPC_PORT"
 	HttpPort        = "HTTP_PORT"
 	Yaml            = "yaml"
 	ConfigPath      = "CONFIG_PATH"

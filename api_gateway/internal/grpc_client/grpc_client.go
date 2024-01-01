@@ -1,4 +1,4 @@
-package client
+package grpc_client
 
 import (
 	"context"
@@ -17,7 +17,7 @@ const (
 	backoffRetries = 3
 )
 
-func NewReaderServiceConn(ctx context.Context, cfg *config.Config, im interceptors.InterceptorManager) (*grpc.ClientConn, error) {
+func NewUserServiceConn(ctx context.Context, cfg *config.Config, im interceptors.InterceptorManager, target string) (*grpc.ClientConn, error) {
 	opts := []grpc_retry.CallOption{
 		grpc_retry.WithBackoff(grpc_retry.BackoffLinear(backoffLinear)),
 		grpc_retry.WithCodes(codes.NotFound, codes.Aborted),
@@ -26,7 +26,7 @@ func NewReaderServiceConn(ctx context.Context, cfg *config.Config, im intercepto
 
 	readerServiceConn, err := grpc.DialContext(
 		ctx,
-		cfg.Grpc.UserServicePort,
+		target,
 		grpc.WithUnaryInterceptor(im.ClientRequestLoggerInterceptor()),
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(grpc_retry.UnaryClientInterceptor(opts...)),

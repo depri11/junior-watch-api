@@ -11,9 +11,9 @@ message CreateUserRequest {
   string Username = 2;
   string Email = 3;
   string Address = 4;
-  double Price = 5;
-  int32 Phone = 6;
-  int32 RoleID = 7;
+  string Phone = 5;
+  string RoleID = 6;
+  string Name = 7;
   google.protobuf.Timestamp CreatedAt = 8;
   string CreatedBy = 9;
   google.protobuf.Timestamp UpdatedAt = 10;
@@ -23,9 +23,9 @@ message CreateUserRequest {
 }
 
 message CreateUserResponse {
-  string ProductID = 1;
+  string UserID = 1;
 }
 
 service userService {
-  rpc CreateProduct(CreateUserRequest) returns (CreateUserResponse);
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
 }

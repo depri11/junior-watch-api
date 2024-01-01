@@ -1,18 +1,18 @@
-package dto
+package models
 
-import uuid "github.com/satori/go.uuid"
+import uuid "github.com/google/uuid"
 
-type CreateUserDto struct {
+type CreateUser struct {
 	UserID         uuid.UUID `json:"userId" validate:"required"`
-	Username       uuid.UUID `json:"username" validate:"required"`
-	Email          uuid.UUID `json:"email" validate:"required"`
-	Name           uuid.UUID `json:"name" validate:"required"`
+	Username       string    `json:"username" validate:"required"`
+	Email          string    `json:"email" validate:"required"`
+	Name           string    `json:"name" validate:"required"`
 	Phone          string    `json:"Phone" validate:"required,gte=0,lte=255"`
 	RoleID         uuid.UUID `json:"roleId" validate:"required"`
 	Address        string    `json:"address"`
 	ProfilePicture float64   `json:"profilePicture"`
 }
 
-type CreateUserResponseDto struct {
+type CreateUserResponse struct {
 	UserID uuid.UUID `json:"userId" validate:"required"`
 }

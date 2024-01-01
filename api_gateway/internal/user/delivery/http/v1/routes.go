@@ -7,7 +7,7 @@ import (
 )
 
 func (h *userHandlers) Routes() {
-	h.group.POST("", h.CreateUser)
+	h.group.POST("/create", h.CreateUser)
 	h.group.Any("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "OK")
 	})
