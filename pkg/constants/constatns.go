@@ -18,4 +18,7 @@ const (
 	REQUEST  = "REQUEST"
 	REPLY    = "REPLY"
 	TIME     = "TIME"
+
+	DBDriverPostgres = "pgx"
+	DBDriverSqlite   = "sqlite3"
 )

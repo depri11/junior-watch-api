@@ -1,4 +1,4 @@
-package postgres
+package database
 
 import (
 	"context"
@@ -17,7 +17,7 @@ const (
 	minConns          = 10
 )
 
-type PgConfig struct {
+type DBConfig struct {
 	Host     string
 	Port     string
 	User     string
@@ -27,7 +27,7 @@ type PgConfig struct {
 	PgDriver string
 }
 
-func NewPgxConn(cfg *PgConfig) (*pgxpool.Pool, error) {
+func NewPgxConn(cfg *DBConfig) (*pgxpool.Pool, error) {
 	ctx := context.Background()
 	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
 		cfg.Host,

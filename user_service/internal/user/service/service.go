@@ -4,18 +4,23 @@ import (
 	"context"
 
 	"github.com/depri11/junior-watch-api/pkg/logger"
+	"github.com/depri11/junior-watch-api/user_service/internal/user/interfaces"
 	userService "github.com/depri11/junior-watch-api/user_service/proto"
-	"github.com/google/uuid"
 )
 
 type UserService struct {
-	log logger.Logger
+	log  logger.Logger
+	repo interfaces.UserRepository
 }
 
-func NewUserService(log logger.Logger) *UserService {
-	return &UserService{log: log}
+func NewUserService(log logger.Logger, repo interfaces.UserRepository) *UserService {
+	return &UserService{log, repo}
 }
 
 func (u *UserService) Register(ctx context.Context, user *userService.CreateUserRequest) (*userService.CreateUserResponse, error) {
-	return &userService.CreateUserResponse{UserID: uuid.NewString()}, nil
+	id, err := u.repo.SaveUser(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	return &userService.CreateUserResponse{UserID: id}, nil
 }

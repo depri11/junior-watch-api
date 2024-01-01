@@ -2,8 +2,8 @@ package config
 
 import (
 	"flag"
-	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/depri11/junior-watch-api/pkg/constants"
@@ -22,7 +22,7 @@ type Config struct {
 	ServiceName string         `mapstructure:"serviceName"`
 	Logger      *logger.Config `mapstructure:"logger"`
 	GRPCServer  GRPCServer     `mapstructure:"grpc-server"`
-	Postgres    Postgres       `mapstructure:"postgres"`
+	Database    Database       `mapstructure:"database"`
 }
 
 type GRPCServer struct {
@@ -35,14 +35,14 @@ type GRPCServer struct {
 	MaxConnectionAge  time.Duration
 }
 
-type Postgres struct {
+type Database struct {
 	Host     string `mapstructure:"host"`
 	Port     string `mapstructure:"port"`
 	User     string `mapstructure:"user"`
 	Password string `mapstructure:"password"`
-	Database string `mapstructure:"database"`
+	Name     string `mapstructure:"name"`
 	SSLMode  string `mapstructure:"sslMode"`
-	PgDriver string `mapstructure:"pgDriver"`
+	DBDriver string `mapstructure:"dbDriver"`
 }
 
 func InitConfig() (*Config, error) {
@@ -55,7 +55,12 @@ func InitConfig() (*Config, error) {
 			if err != nil {
 				return nil, errors.Wrap(err, "os.Getwd")
 			}
-			configPath = fmt.Sprintf("%s/user_service/config/config.yaml", getwd)
+			fileName := "config.yaml"
+			if flag.Lookup("test.v") != nil {
+				getwd = filepath.Join(getwd, "..", "..")
+				fileName = "config_test.yaml"
+			}
+			configPath = filepath.Join(getwd, "user_service", "config", fileName)
 		}
 	}
 

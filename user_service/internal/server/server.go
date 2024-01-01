@@ -11,21 +11,22 @@ import (
 	"github.com/depri11/junior-watch-api/pkg/logger"
 	"github.com/depri11/junior-watch-api/user_service/config"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/delivery"
+	"github.com/depri11/junior-watch-api/user_service/internal/user/repository"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/service"
 	userService "github.com/depri11/junior-watch-api/user_service/proto"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 )
 
 type Server struct {
-	log     logger.Logger
-	cfg     *config.Config
-	pgxPool *pgxpool.Pool
+	log logger.Logger
+	cfg *config.Config
+	db  *sqlx.DB
 }
 
-func NewServer(logger logger.Logger, cfg *config.Config, pgxPool *pgxpool.Pool) *Server {
-	return &Server{log: logger, cfg: cfg, pgxPool: pgxPool}
+func NewServer(logger logger.Logger, cfg *config.Config, db *sqlx.DB) *Server {
+	return &Server{log: logger, cfg: cfg, db: db}
 }
 
 func (s *Server) Run() error {
@@ -45,9 +46,10 @@ func (s *Server) Run() error {
 		Time:              s.cfg.GRPCServer.Timeout * time.Minute,
 	}))
 
-	serviceUser := service.NewUserService(s.log)
+	repoUser := repository.NewUserRepository(s.log, s.db)
+	serviceUser := service.NewUserService(s.log, repoUser)
 
-	deliveryUser := delivery.NewUserService(serviceUser, s.log)
+	deliveryUser := delivery.NewUserDelivery(serviceUser, s.log)
 	userService.RegisterUserServiceServer(server, deliveryUser)
 
 	go func() {

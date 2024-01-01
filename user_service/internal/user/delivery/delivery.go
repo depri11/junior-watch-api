@@ -13,7 +13,7 @@ type UserDelivery struct {
 	logger      logger.Logger
 }
 
-func NewUserService(userService interfaces.UserService, logger logger.Logger) *UserDelivery {
+func NewUserDelivery(userService interfaces.UserService, logger logger.Logger) *UserDelivery {
 	return &UserDelivery{userService: userService, logger: logger}
 }
 
