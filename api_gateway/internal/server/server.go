@@ -12,7 +12,7 @@ import (
 	"github.com/depri11/junior-watch-api/api_gateway/internal/user/service"
 	"github.com/depri11/junior-watch-api/pkg/interceptors"
 	"github.com/depri11/junior-watch-api/pkg/logger"
-	userService "github.com/depri11/junior-watch-api/user_service/proto"
+	go_proto "github.com/depri11/junior-watch-api/pkg/proto"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
 )
@@ -42,7 +42,7 @@ func (s *server) Run() error {
 	}
 
 	defer userServiceConn.Close() // nolint: errcheck
-	userClient := userService.NewUserServiceClient(userServiceConn)
+	userClient := go_proto.NewUserServiceClient(userServiceConn)
 
 	s.ps = service.NewUserService(s.log, s.cfg, userClient)
 

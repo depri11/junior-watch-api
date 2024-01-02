@@ -5,11 +5,11 @@ import (
 	"testing"
 
 	"github.com/depri11/junior-watch-api/pkg/logger"
+	go_proto "github.com/depri11/junior-watch-api/pkg/proto"
 	"github.com/depri11/junior-watch-api/pkg/test"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/delivery"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/repository"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/service"
-	userService "github.com/depri11/junior-watch-api/user_service/proto"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +29,7 @@ func Test_DeliveryCreateUser(t *testing.T) {
 	}
 	type args struct {
 		ctx  context.Context
-		user *userService.CreateUserRequest
+		user *go_proto.CreateUserRequest
 	}
 
 	f := fields{
@@ -49,10 +49,10 @@ func Test_DeliveryCreateUser(t *testing.T) {
 			fields: f,
 			args: args{
 				ctx: context.Background(),
-				user: &userService.CreateUserRequest{
+				user: &go_proto.CreateUserRequest{
 					Username: "test",
 					Email:    "test@test",
-					Role:     userService.Role_USER,
+					Role:     go_proto.Role_USER,
 					Name:     "test",
 					Address:  "test",
 					Phone:    "31351313",

@@ -4,6 +4,6 @@ api:
 user:
 	go run user_service/cmd/main.go -config=./user_service/config/config.yaml
 
-proto-user:
+gen-proto:
 	@echo Generating user microservice proto
-	cd user_service/proto && protoc --go_out=. --go-grpc_opt=require_unimplemented_servers=false --go-grpc_out=. user.proto
+	cd pkg/proto && protoc --go_out=. --go-grpc_opt=require_unimplemented_servers=false --go-grpc_out=. user.proto

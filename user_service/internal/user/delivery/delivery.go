@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/depri11/junior-watch-api/pkg/logger"
+	go_proto "github.com/depri11/junior-watch-api/pkg/proto"
 	"github.com/depri11/junior-watch-api/user_service/internal/models"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/interfaces"
-	userService "github.com/depri11/junior-watch-api/user_service/proto"
 	"github.com/google/uuid"
 )
 
@@ -19,7 +19,7 @@ func NewUserDelivery(userService interfaces.UserService, logger logger.Logger) *
 	return &UserDelivery{userService: userService, logger: logger}
 }
 
-func (u *UserDelivery) CreateUser(ctx context.Context, r *userService.CreateUserRequest) (*userService.CreateUserResponse, error) {
+func (u *UserDelivery) CreateUser(ctx context.Context, r *go_proto.CreateUserRequest) (*go_proto.CreateUserResponse, error) {
 
 	user := &models.CreateUser{
 		UserID:   uuid.NewString(),
@@ -35,5 +35,5 @@ func (u *UserDelivery) CreateUser(ctx context.Context, r *userService.CreateUser
 	if err != nil {
 		return nil, err
 	}
-	return &userService.CreateUserResponse{UserID: res.UserID}, nil
+	return &go_proto.CreateUserResponse{UserID: res.UserID}, nil
 }

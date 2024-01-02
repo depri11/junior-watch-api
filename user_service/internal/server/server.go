@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/depri11/junior-watch-api/pkg/logger"
+	go_proto "github.com/depri11/junior-watch-api/pkg/proto"
 	"github.com/depri11/junior-watch-api/user_service/config"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/delivery"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/repository"
 	"github.com/depri11/junior-watch-api/user_service/internal/user/service"
-	userService "github.com/depri11/junior-watch-api/user_service/proto"
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -50,7 +50,7 @@ func (s *Server) Run() error {
 	serviceUser := service.NewUserService(s.log, repoUser)
 
 	deliveryUser := delivery.NewUserDelivery(serviceUser, s.log)
-	userService.RegisterUserServiceServer(server, deliveryUser)
+	go_proto.RegisterUserServiceServer(server, deliveryUser)
 
 	go func() {
 		s.log.Infof("GRPC Server is listening on port: %v", s.cfg.GRPCServer.Port)

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package userService;
+package go_proto;
 
-option go_package = "./;userService";
+option go_package = "./;go_proto";
 
 enum Role {
   USER = 0;

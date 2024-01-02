@@ -6,23 +6,23 @@ import (
 	"github.com/depri11/junior-watch-api/api_gateway/config"
 	"github.com/depri11/junior-watch-api/api_gateway/internal/models"
 	"github.com/depri11/junior-watch-api/pkg/logger"
-	userService "github.com/depri11/junior-watch-api/user_service/proto"
+	go_proto "github.com/depri11/junior-watch-api/pkg/proto"
 	"github.com/google/uuid"
 )
 
 type UserService struct {
 	log        logger.Logger
 	cfg        *config.Config
-	userClient userService.UserServiceClient
+	userClient go_proto.UserServiceClient
 }
 
-func NewUserService(log logger.Logger, cfg *config.Config, userClient userService.UserServiceClient) *UserService {
+func NewUserService(log logger.Logger, cfg *config.Config, userClient go_proto.UserServiceClient) *UserService {
 	return &UserService{log, cfg, userClient}
 }
 
 func (s *UserService) CreateUser(ctx context.Context, payload models.CreateUser) (*models.CreateUserResponse, error) {
 
-	res, err := s.userClient.CreateUser(ctx, &userService.CreateUserRequest{
+	res, err := s.userClient.CreateUser(ctx, &go_proto.CreateUserRequest{
 		Username: payload.Username,
 		Email:    payload.Email,
 		Phone:    payload.Phone,
