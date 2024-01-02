@@ -1,15 +1,15 @@
-serviceName: user_service
-grpc-server:
+service_name: user_service
+grpc_server:
     port: :6002
     development: true
-    Timeout: 15
-    ReadTimeout: 5
-    WriteTimeout: 5
-    MaxConnectionIdle: 5
-    MaxConnectionAge: 5
+    timeout: 15
+    read_timeout: 5
+    write_timeout: 5
+    max_connection_idle: 5
+    max_connection_age: 5
 logger:
     level: debug
-    devMode: false
+    dev_mode: false
     encoder: json
 database:
     host: localhost
@@ -17,5 +17,5 @@ database:
     user: db
     password: db
     name: user_db
-    sslMode: disable
-    dbDriver: pgx
+    ssl_mode: disable
+    db_driver: pgx

@@ -19,20 +19,20 @@ func init() {
 }
 
 type Config struct {
-	ServiceName string         `mapstructure:"serviceName"`
+	ServiceName string         `mapstructure:"service_name"`
 	Logger      *logger.Config `mapstructure:"logger"`
-	GRPCServer  GRPCServer     `mapstructure:"grpc-server"`
+	GRPCServer  GRPCServer     `mapstructure:"grpc_server"`
 	Database    Database       `mapstructure:"database"`
 }
 
 type GRPCServer struct {
-	Port              string `mapstructure:"port"`
-	Development       bool   `mapstructure:"development"`
-	Timeout           time.Duration
-	ReadTimeout       time.Duration
-	WriteTimeout      time.Duration
-	MaxConnectionIdle time.Duration
-	MaxConnectionAge  time.Duration
+	Port              string        `mapstructure:"port"`
+	Development       bool          `mapstructure:"development"`
+	Timeout           time.Duration `mapstructure:"timeout"`
+	ReadTimeout       time.Duration `mapstructure:"read_timeout"`
+	WriteTimeout      time.Duration `mapstructure:"write_timeout"`
+	MaxConnectionIdle time.Duration `mapstructure:"max_connection_idle"`
+	MaxConnectionAge  time.Duration `mapstructure:"max_connection_age"`
 }
 
 type Database struct {
@@ -41,8 +41,8 @@ type Database struct {
 	User     string `mapstructure:"user"`
 	Password string `mapstructure:"password"`
 	Name     string `mapstructure:"name"`
-	SSLMode  string `mapstructure:"sslMode"`
-	DBDriver string `mapstructure:"dbDriver"`
+	SSLMode  string `mapstructure:"ssl_mode"`
+	DBDriver string `mapstructure:"db_driver"`
 }
 
 func InitConfig() (*Config, error) {
