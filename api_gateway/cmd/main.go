@@ -7,7 +7,7 @@ import (
 	"github.com/depri11/junior-watch-api/api_gateway/config"
 	"github.com/depri11/junior-watch-api/api_gateway/internal/server"
 	"github.com/depri11/junior-watch-api/pkg/logger"
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	appLogger.InitLogger()
 	appLogger.WithName("ApiGateway")
 
-	gin := gin.Default()
+	gin := mux.NewRouter()
 
 	s := server.NewServer(gin, appLogger, cfg)
 	appLogger.Fatal(s.Run())

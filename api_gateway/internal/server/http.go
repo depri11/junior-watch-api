@@ -17,7 +17,7 @@ const (
 func (s *server) runHttpServer() error {
 	server := &http.Server{
 		Addr:           s.cfg.Http.Port,
-		Handler:        s.gin,
+		Handler:        s.mux,
 		ReadTimeout:    readTimeout,
 		WriteTimeout:   writeTimeout,
 		MaxHeaderBytes: maxHeaderBytes,

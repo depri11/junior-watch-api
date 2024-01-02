@@ -7,18 +7,18 @@ import (
 	"syscall"
 
 	"github.com/depri11/junior-watch-api/api_gateway/config"
-	"github.com/depri11/junior-watch-api/api_gateway/internal/grpc_client"
+	grpcClient "github.com/depri11/junior-watch-api/api_gateway/internal/grpc_client"
 	v1 "github.com/depri11/junior-watch-api/api_gateway/internal/user/delivery/http/v1"
 	"github.com/depri11/junior-watch-api/api_gateway/internal/user/service"
 	"github.com/depri11/junior-watch-api/pkg/interceptors"
 	"github.com/depri11/junior-watch-api/pkg/logger"
 	go_proto "github.com/depri11/junior-watch-api/pkg/proto"
-	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
+	"github.com/gorilla/mux"
 )
 
 type server struct {
-	gin *gin.Engine
+	mux *mux.Router
 	log logger.Logger
 	cfg *config.Config
 	v   *validator.Validate
@@ -26,8 +26,8 @@ type server struct {
 	ps  *service.UserService
 }
 
-func NewServer(gin *gin.Engine, log logger.Logger, cfg *config.Config) *server {
-	return &server{gin: gin, log: log, cfg: cfg, v: validator.New()}
+func NewServer(mux *mux.Router, log logger.Logger, cfg *config.Config) *server {
+	return &server{mux: mux, log: log, cfg: cfg, v: validator.New()}
 }
 
 func (s *server) Run() error {
@@ -36,7 +36,7 @@ func (s *server) Run() error {
 
 	s.im = interceptors.NewInterceptorManager(s.log)
 
-	userServiceConn, err := grpc_client.NewUserServiceConn(ctx, s.cfg, s.im, s.cfg.Grpc.UserServicePort)
+	userServiceConn, err := grpcClient.NewUserServiceConn(ctx, s.cfg, s.im, s.cfg.Grpc.UserServicePort)
 	if err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (s *server) Run() error {
 
 	s.ps = service.NewUserService(s.log, s.cfg, userClient)
 
-	usersHandlers := v1.NewUserHandlers(s.gin.Group(s.cfg.Http.UsersPath), s.log, s.cfg, s.v, s.ps)
+	usersHandlers := v1.NewUserHandlers(s.mux.PathPrefix(s.cfg.Http.UsersPath).Subrouter(), s.log, s.cfg, s.v, s.ps)
 	usersHandlers.Routes()
 
 	quit := make(chan os.Signal, 1)

@@ -2,19 +2,21 @@ package v1
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/depri11/junior-watch-api/api_gateway/config"
 	"github.com/depri11/junior-watch-api/api_gateway/internal/models"
 	"github.com/depri11/junior-watch-api/api_gateway/internal/user/service"
+	httpErrors "github.com/depri11/junior-watch-api/pkg/http_errors"
 	"github.com/depri11/junior-watch-api/pkg/logger"
-	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 type userHandlers struct {
-	group       *gin.RouterGroup
+	group       *mux.Router
 	log         logger.Logger
 	cfg         *config.Config
 	v           *validator.Validate
@@ -22,7 +24,7 @@ type userHandlers struct {
 }
 
 func NewUserHandlers(
-	group *gin.RouterGroup,
+	group *mux.Router,
 	log logger.Logger,
 	cfg *config.Config,
 	v *validator.Validate,
@@ -31,10 +33,11 @@ func NewUserHandlers(
 	return &userHandlers{group: group, log: log, cfg: cfg, v: v, userService: userService}
 }
 
-func (h *userHandlers) CreateUser(c *gin.Context) {
+func (h *userHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var payload models.CreateUser
-	if err := c.ShouldBindJSON(&payload); err != nil {
-		c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		httpErrors.ErrorCtxResponse(w, r, err)
 		return
 	}
 
@@ -44,15 +47,22 @@ func (h *userHandlers) CreateUser(c *gin.Context) {
 	ctx := context.Background()
 
 	if err := h.v.StructCtx(ctx, payload); err != nil {
-		c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+		httpErrors.ErrorCtxResponse(w, r, err)
 		return
 	}
 
 	res, err := h.userService.CreateUser(ctx, payload)
 	if err != nil {
-		c.AbortWithStatusJSON(400, gin.H{"error": err.Error()})
+		httpErrors.ErrorCtxResponse(w, r, err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, res)
+	resBytes, err := json.Marshal(res)
+	if err != nil {
+		httpErrors.ErrorCtxResponse(w, r, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(resBytes)
 }
