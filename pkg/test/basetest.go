@@ -59,7 +59,7 @@ func NewBaseTest() (*BaseTest, error) {
 		Name:     cfg.Database.Name,
 		SSLMode:  cfg.Database.SSLMode,
 		DBDriver: cfg.Database.DBDriver,
-	}, db)
+	}, appLogger)
 	if err != nil {
 		return nil, err
 	}

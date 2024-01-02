@@ -1,0 +1,21 @@
+serviceName: user_service
+grpc-server:
+    port: :6002
+    development: true
+    Timeout: 15
+    ReadTimeout: 5
+    WriteTimeout: 5
+    MaxConnectionIdle: 5
+    MaxConnectionAge: 5
+logger:
+    level: debug
+    devMode: false
+    encoder: json
+database:
+    host: localhost
+    port: 5432
+    user: db
+    password: db
+    name: user_db_test
+    sslMode: disable
+    dbDriver: sqlite3

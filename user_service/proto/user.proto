@@ -4,7 +4,10 @@ package userService;
 
 option go_package = "./;userService";
 
-import "google/protobuf/timestamp.proto";
+enum Role {
+  ADMIN = 0;
+  USER = 1;
+}
 
 message CreateUserRequest {
   string UserID = 1;
@@ -12,13 +15,13 @@ message CreateUserRequest {
   string Email = 3;
   string Address = 4;
   string Phone = 5;
-  string RoleID = 6;
+  Role Role = 6;
   string Name = 7;
-  google.protobuf.Timestamp CreatedAt = 8;
+  int64 CreatedAt = 8;
   string CreatedBy = 9;
-  google.protobuf.Timestamp UpdatedAt = 10;
+  int64 UpdatedAt = 10;
   string UpdatedBy = 11;
-  google.protobuf.Timestamp DeleteAt = 12;
+  int64 DeleteAt = 12;
   string DeleteBy = 13;
 }
 
