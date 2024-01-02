@@ -23,8 +23,6 @@ func NewUserService(log logger.Logger, cfg *config.Config, userClient userServic
 func (s *UserService) CreateUser(ctx context.Context, payload models.CreateUser) (*models.CreateUserResponse, error) {
 
 	res, err := s.userClient.CreateUser(ctx, &userService.CreateUserRequest{
-		UserID:   payload.UserID.String(),
-		RoleID:   payload.RoleID.String(),
 		Username: payload.Username,
 		Email:    payload.Email,
 		Phone:    payload.Phone,

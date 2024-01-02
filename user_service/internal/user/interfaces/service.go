@@ -3,9 +3,9 @@ package interfaces
 import (
 	"context"
 
-	userService "github.com/depri11/junior-watch-api/user_service/proto"
+	"github.com/depri11/junior-watch-api/user_service/internal/models"
 )
 
 type UserService interface {
-	Register(ctx context.Context, user *userService.CreateUserRequest) (*userService.CreateUserResponse, error)
+	Register(ctx context.Context, user *models.CreateUser) (*models.CreateUserResponse, error)
 }
