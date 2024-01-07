@@ -46,8 +46,8 @@ func (s *Server) Run() error {
 		Time:              s.cfg.GRPCServer.Timeout * time.Minute,
 	}))
 
-	repoUser := repository.NewUserRepository(s.log, s.db)
-	serviceUser := service.NewUserService(s.log, repoUser)
+	repoUser := repository.NewUserRepository(&s.log, s.db)
+	serviceUser := service.NewUserService(&s.log, repoUser)
 
 	deliveryUser := delivery.NewUserDelivery(serviceUser, s.log)
 	go_proto.RegisterUserServiceServer(server, deliveryUser)

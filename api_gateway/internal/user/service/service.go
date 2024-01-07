@@ -22,7 +22,7 @@ func NewUserService(log logger.Logger, cfg *config.Config, userClient go_proto.U
 
 func (s *UserService) CreateUser(ctx context.Context, payload models.CreateUser) (*models.CreateUserResponse, error) {
 
-	res, err := s.userClient.CreateUser(ctx, &go_proto.CreateUserRequest{
+	res, err := s.userClient.Register(ctx, &go_proto.CreateUserRequest{
 		Username: payload.Username,
 		Email:    payload.Email,
 		Phone:    payload.Phone,

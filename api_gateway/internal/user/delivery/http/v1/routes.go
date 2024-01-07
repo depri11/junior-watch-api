@@ -5,11 +5,9 @@ import (
 )
 
 func (h *userHandlers) Routes() {
-	h.group.Path("/create").Methods(http.MethodPost).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		h.CreateUser(w, r)
-	})
-	h.group.Path("/health").Methods(http.MethodGet).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	h.group.HandleFunc("/create", h.CreateUser).Methods("POST")
+	h.group.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(http.StatusText(http.StatusOK)))
-	})
+	}).Methods("GET")
 }

@@ -19,8 +19,8 @@ func Test_DeliveryCreateUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, bt)
 
-	repo := repository.NewUserRepository(bt.Log, bt.Db)
-	service := service.NewUserService(bt.Log, repo)
+	repo := repository.NewUserRepository(&bt.Log, bt.Db)
+	service := service.NewUserService(&bt.Log, repo)
 	delivery := delivery.NewUserDelivery(service, bt.Log)
 
 	type fields struct {
@@ -64,7 +64,7 @@ func Test_DeliveryCreateUser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			res, err := delivery.CreateUser(context.Background(), tt.args.user)
+			res, err := delivery.Register(context.Background(), tt.args.user)
 			assert.Nil(t, err)
 			assert.NotEqual(t, "", res.UserID)
 		})

@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package go_proto;
+package goProto;
 
-option go_package = "./;go_proto";
+option go_package = "./;goProto";
 
 enum Role {
   USER = 0;
   ADMIN = 1;
 }
 
-message CreateUserRequest {
+message User {
   string UserID = 1;
   string Username = 2;
   string Email = 3;
@@ -25,10 +25,30 @@ message CreateUserRequest {
   string DeleteBy = 13;
 }
 
+message CreateUserRequest {
+  string UserID = 1;
+  string Username = 2;
+  string Email = 3;
+  string Address = 4;
+  string Phone = 5;
+  Role Role = 6;
+  string Name = 7;
+}
+
 message CreateUserResponse {
   string UserID = 1;
 }
 
+message LoginRequest {
+  string Email = 1;
+  string Password = 2;
+}
+
+message LoginResponse {
+  User User = 1;
+  string SessionID = 2;
+}
+
 service userService {
-  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc Register(CreateUserRequest) returns (CreateUserResponse);
 }

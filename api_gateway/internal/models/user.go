@@ -7,7 +7,7 @@ type CreateUser struct {
 	Username       string    `json:"username" validate:"required"`
 	Email          string    `json:"email" validate:"required"`
 	Name           string    `json:"name" validate:"required"`
-	Phone          string    `json:"Phone" validate:"required,gte=0,lte=255"`
+	Phone          string    `json:"phone" validate:"required,gte=0,lte=255"`
 	RoleID         uuid.UUID `json:"roleId" validate:"required"`
 	Address        string    `json:"address"`
 	ProfilePicture string    `json:"profilePicture"`

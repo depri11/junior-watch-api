@@ -22,8 +22,8 @@ func main() {
 	appLogger.InitLogger()
 	appLogger.WithName("ApiGateway")
 
-	gin := mux.NewRouter()
+	r := mux.NewRouter()
 
-	s := server.NewServer(gin, appLogger, cfg)
+	s := server.NewServer(r, appLogger, cfg)
 	appLogger.Fatal(s.Run())
 }

@@ -1,5 +1,16 @@
 package models
 
+type User struct {
+	UserID         string
+	Username       string
+	Email          string
+	Name           string
+	Phone          string
+	Role           int
+	Address        string
+	ProfilePicture float64
+}
+
 type CreateUser struct {
 	UserID         string  `json:"userId" validate:"required"`
 	Username       string  `json:"username" validate:"required"`
@@ -13,4 +24,9 @@ type CreateUser struct {
 
 type CreateUserResponse struct {
 	UserID string `json:"userId" validate:"required"`
+}
+
+type LoginRequest struct {
+	Email    string
+	Password string
 }
